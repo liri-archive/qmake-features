@@ -12,13 +12,15 @@ load(cmake_functions)
 # at cmake time whether package has been found via a symlink, and correct
 # that to an absolute path. This is only done for installations to
 # the /usr or / prefix.
-CMAKE_INSTALL_LIBS_DIR = $$cmakeTargetPath($$[QT_INSTALL_LIBS])
+CMAKE_INSTALL_LIBS_DIR = $$cmakeTargetPath($$LIRI_INSTALL_LIBDIR)
 contains(CMAKE_INSTALL_LIBS_DIR, ^(/usr)?/lib(64)?.*): CMAKE_USR_MOVE_WORKAROUND = $$CMAKE_INSTALL_LIBS_DIR
 
 CMAKE_OUT_DIR = $$MODULE_BASE_OUTDIR/lib/cmake
 
-CMAKE_MODULE_NAME *= $$cmakeModuleName($${MODULE})
-CMAKE_MODULE_NAMESPACE *= $$cmakeModuleName($${MODULE})
+isEmpty(CMAKE_MODULE_NAME):CMAKE_MODULE_NAME = $$cmakeModuleName($${MODULE})
+isEmpty(CMAKE_MODULE_NAMESPACE):CMAKE_MODULE_NAMESPACE = $$cmakeModuleName($${MODULE})
+isEmpty(CMAKE_MODULE_NAME):error("CMake module name is not defined")
+isEmpty(CMAKE_MODULE_NAMESPACE):error("CMake module namespace is not defined")
 
 split_incpath {
     CMAKE_ADD_SOURCE_INCLUDE_DIRS = true
@@ -41,18 +43,18 @@ split_incpath {
 
 CMAKE_INCLUDE_DIR = $$cmakeRelativePath($$LIRI_INSTALL_INCLUDEDIR, $$LIRI_INSTALL_PREFIX)
 contains(CMAKE_INCLUDE_DIR, "^\\.\\./.*") {
-    CMAKE_INCLUDE_DIR = $$[QT_INSTALL_HEADERS]/
+    CMAKE_INCLUDE_DIR = $$LIRI_INSTALL_INCLUDEDIR/
     CMAKE_INCLUDE_DIR_IS_ABSOLUTE = True
 }
 
 !exists($$first(QT.$${MODULE}_private.includes)): CMAKE_NO_PRIVATE_INCLUDES = true
 
-CMAKE_LIB_DIR = $$cmakeRelativePath($$[QT_INSTALL_LIBS], $$[QT_INSTALL_PREFIX])
+CMAKE_LIB_DIR = $$cmakeRelativePath($$LIRI_INSTALL_LIBDIR, $$LIRI_INSTALL_PREFIX)
 contains(CMAKE_LIB_DIR,"^\\.\\./.*") {
-    CMAKE_LIB_DIR = $$[QT_INSTALL_LIBS]/
+    CMAKE_LIB_DIR = $$LIRI_INSTALL_LIBDIR/
     CMAKE_LIB_DIR_IS_ABSOLUTE = True
 } else {
-    CMAKE_RELATIVE_INSTALL_LIBS_DIR = $$cmakeRelativePath($$[QT_INSTALL_PREFIX], $$[QT_INSTALL_LIBS])
+    CMAKE_RELATIVE_INSTALL_LIBS_DIR = $$cmakeRelativePath($$LIRI_INSTALL_PREFIX, $$LIRI_INSTALL_LIBDIR)
     # We need to go up another two levels because the CMake files are
     # installed in $${CMAKE_LIB_DIR}/cmake/$${CMAKE_MODULE_NAME}
     CMAKE_RELATIVE_INSTALL_DIR = "$${CMAKE_RELATIVE_INSTALL_LIBS_DIR}../../"
@@ -64,16 +66,16 @@ contains(CMAKE_BIN_DIR, "^\\.\\./.*") {
     CMAKE_BIN_DIR_IS_ABSOLUTE = True
 }
 
-CMAKE_PLUGIN_DIR = $$cmakeRelativePath($$[QT_INSTALL_PLUGINS], $$[QT_INSTALL_PREFIX])
+CMAKE_PLUGIN_DIR = $$cmakeRelativePath($$LIRI_INSTALL_PLUGINSDIR, $$LIRI_INSTALL_PREFIX])
 contains(CMAKE_PLUGIN_DIR, "^\\.\\./.*") {
-    CMAKE_PLUGIN_DIR = $$[QT_INSTALL_PLUGINS]/
+    CMAKE_PLUGIN_DIR = $$LIRI_INSTALL_PLUGINSDIR/
     CMAKE_PLUGIN_DIR_IS_ABSOLUTE = True
 }
 
 win32:!static:!staticlib {
-    CMAKE_DLL_DIR = $$cmakeRelativePath($$[QT_INSTALL_BINS], $$[QT_INSTALL_PREFIX])
+    CMAKE_DLL_DIR = $$cmakeRelativePath($$LIRI_INSTALL_BINDIR, $$LIRI_INSTALL_PREFIX)
     contains(CMAKE_DLL_DIR, "^\\.\\./.*") {
-        CMAKE_DLL_DIR = $$[QT_INSTALL_BINS]/
+        CMAKE_DLL_DIR = $$LIRI_INSTALL_BINDIR/
         CMAKE_DLL_DIR_IS_ABSOLUTE = True
     }
 } else {
