@@ -3,6 +3,6 @@ load(qt_plugin)
 
 CONFIG -= create_cmake
 
-!use_qt_paths {
+!install_under_qt {
     target.path = $$LIRI_INSTALL_PLUGINSDIR/$$PLUGIN_TYPE
 }

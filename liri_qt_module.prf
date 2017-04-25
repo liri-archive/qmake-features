@@ -3,7 +3,7 @@ load(qt_module)
 
 CONFIG -= create_cmake
 
-!use_qt_paths {
+!install_under_qt {
     QT_MODULE_INCLUDE_BASE = $$LIRI_INSTALL_INCLUDEDIR
 
     QMAKE_PKGCONFIG_PREFIX = $$LIRI_INSTALL_PREFIX

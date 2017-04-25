@@ -1,4 +1,4 @@
-use_qt_paths {
+install_under_qt {
     LIRI_INSTALL_PREFIX = $$[QT_INSTALL_PREFIX]
     LIRI_INSTALL_BINDIR = $$[QT_INSTALL_BINS]
     LIRI_INSTALL_SBINDIR = $$[QT_INSTALL_BINS]
@@ -46,13 +46,25 @@ use_qt_paths {
         LIRI_INSTALL_INCLUDEDIR = $$LIRI_INSTALL_PREFIX/include
     }
     isEmpty(LIRI_INSTALL_IMPORTDIR) {
-        LIRI_INSTALL_IMPORTDIR = $$LIRI_INSTALL_LIBDIR/imports
+        use_qt_paths {
+            LIRI_INSTALL_IMPORTDIR = $$[QT_INSTALL_IMPORTS]
+        } else {
+            LIRI_INSTALL_IMPORTDIR = $$LIRI_INSTALL_LIBDIR/imports
+        }
     }
     isEmpty(LIRI_INSTALL_PLUGINSDIR) {
-        LIRI_INSTALL_PLUGINSDIR = $$LIRI_INSTALL_LIBDIR/plugins
+        use_qt_paths {
+            LIRI_INSTALL_PLUGINSDIR = $$[QT_INSTALL_PLUGINS]
+        } else {
+            LIRI_INSTALL_PLUGINSDIR = $$LIRI_INSTALL_LIBDIR/plugins
+        }
     }
     isEmpty(LIRI_INSTALL_QMLDIR) {
-        LIRI_INSTALL_QMLDIR = $$LIRI_INSTALL_LIBDIR/qml
+        use_qt_paths {
+            LIRI_INSTALL_QMLDIR = $$[QT_INSTALL_QML]
+        } else {
+            LIRI_INSTALL_QMLDIR = $$LIRI_INSTALL_LIBDIR/qml
+        }
     }
     isEmpty(LIRI_INSTALL_APPLICATIONSDIR) {
         LIRI_INSTALL_APPLICATIONSDIR = $$LIRI_INSTALL_PREFIX/share/applications
@@ -70,5 +82,5 @@ linux {
 }
 
 android {
-    CONFIG += use_qt_paths
+    CONFIG += install_under_qt
 }
