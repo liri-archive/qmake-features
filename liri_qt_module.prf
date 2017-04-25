@@ -1,7 +1,7 @@
 load(liri_deployment)
 load(qt_module)
 
-CONFIG -= create_cmake
+CONFIG -= create_cmake qt_install_module
 
 !install_under_qt {
     QT_MODULE_INCLUDE_BASE = $$LIRI_INSTALL_INCLUDEDIR
