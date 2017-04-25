@@ -5,5 +5,5 @@ CONFIG -= create_cmake
 CONFIG += liri_create_cmake
 
 !use_qt_paths {
-    target.path = $$LIRI_INSTALL_LIBDIR/plugins/$$PLUGIN_TYPE
+    target.path = $$LIRI_INSTALL_PLUGINSDIR/$$PLUGIN_TYPE
 }
